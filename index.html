@@ -2,14 +2,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasa Api Pictures</title>
+    <title>Nasa API Pictures</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://s2.googleusercontent.com/s2/favicons?domain=www.nasa.gov">
 </head>
 <body>
-    <button onclick="getMorePictures()">Get More</button>
     <div class="container">
-        <div class="favorites" id="favorites"></div>
-        <div class="results" id="results"></div>
+
+        <div id="favorites">
+            <!-- <div class="text-select-container">
+                <h3 class="text-select blue" onclick="showFavorites()">Load Random Images</h3>
+            </div> -->
+        </div>
+        <div id="results">
+            <!-- <div style="position: fixed;"> -->
+                <div class="text-select-container">
+                    <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
+                    <h3 class="text-select">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+                    <h3 class="text-select blue" onclick="getMorePictures()">Load More</h3>
+                </div>
+            </div>
+        <!-- </div> -->
     </div>
 
     <script src="script.js"></script>
