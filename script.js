@@ -38,8 +38,8 @@ function getMorePictures() {
 
 // Create individual result elements, adds elements when getting more pictures
 function updateResultsDOM() {
+    // Loop through Results Array to replace undefined copyright
     console.log("Results Array:", resultsArray);
-    let i;
     for (i = 0; i < resultsArray.length; i++) {
         resultsArray[i].copyright
         if (resultsArray[i].copyright == undefined) {
@@ -69,8 +69,12 @@ function updateResultsDOM() {
 
 // Creates elements for favorite items in array
 function updateFavoritesDOM() {
+    // Get Favorites Array from localStorage
+    if (localStorage.getItem('nasaFavorites') !== null) {
+        favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
+    }
+    // Loop through Results Array to replace undefined copyright
     console.log("Favorites Array:", favoritesArray);
-    let i;
     for (i = 0; i < favoritesArray.length; i++) {
         favoritesArray[i].copyright
         if (favoritesArray[i].copyright == undefined) {
@@ -101,6 +105,12 @@ function updateFavoritesDOM() {
 
 // Add result to Favorites Array
 function saveFavorite(result) {
+    // Get Favorites Array from localStorage
+    if (localStorage.getItem('nasaFavorites') !== null) {
+        favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
+    }
+    
+    // Loop through Results Array to select Favorite
     for (i = 0; i < resultsArray.length; i++) {
         if (resultsArray[i].url.includes(result)) {
             let resultMatch = resultsArray[i];
@@ -126,9 +136,9 @@ function saveFavorite(result) {
 function removeFavorite(result) {
     for (i = 0; i < favoritesArray.length; i++) {
         if (favoritesArray[i].url.includes(result)) {
-            let favoriteMatch = favoritesArray[i];
+            // let favoriteMatch = favoritesArray[i];
             //console.log(favoriteMatch);
-            favoritesArray.pop(favoriteMatch);
+            favoritesArray.splice(i, 1);
             console.log("Favorites Array:", favoritesArray);
 
             // Set Favorites Array in localStorage
@@ -146,11 +156,6 @@ function showFavorites() {
     resultsContainer.classList.remove('display-block');
     favoritesNav.classList.remove('display-none');
     favoritesNav.classList.add('display-block'); 
-
-    // Get Favorites Array from localStorage
-    if (localStorage.getItem('nasaFavorites') !== null) {
-        favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
-    }
 
     // Scroll to top of page, refresh DOM
     window.scroll(0, -3000);
