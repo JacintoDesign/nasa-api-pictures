@@ -1,6 +1,7 @@
 const favoritesContainer = document.getElementById('favorites');
 const resultsContainer = document.getElementById('results');
-const favoritesNav = document.getElementById('favoritesNav')
+const favoritesNav = document.getElementById('favoritesNav');
+const saveConfirm = document.getElementById('saveConfirm');
 
 // Initialize two empty arrays
 let resultsArray = [];
@@ -32,7 +33,6 @@ function getMorePictures() {
         }
         updateResultsDOM();
     });
-
 }
 
 // Create individual result elements, adds elements when getting more pictures
@@ -54,7 +54,7 @@ function updateResultsDOM() {
             </a>      
             <div class="card-body">
             <h5 class="card-title">${result.title}</h5>
-            <p class="save-text" onclick="saveFavorite('${result.url}')">Add To Favorites</p>
+            <p class="save-text" onclick="saveFavorite('${result.url}')" id="favoriteLabel">Add To Favorites</p>
             <p class="card-text">${result.explanation}</p>
             <p class="card-text"><small class="text-muted">
                 <strong>${result.date}</strong>
@@ -98,26 +98,33 @@ function updateFavoritesDOM() {
       ).join('');
 }
 
-// Add result to favorites array
+// Add result to Favorites Array
 function saveFavorite(result) {
     for (i = 0; i < resultsArray.length; i++) {
         if (resultsArray[i].url.includes(result)) {
             let resultMatch = resultsArray[i];
-            console.log(resultMatch);
+            //console.log(resultMatch);
             favoritesArray.push(resultMatch);
-            console.log(favoritesArray);
+            console.log("Favorites Array:", favoritesArray);
+            // Show Save Confirmation for 2 seconds
+            saveConfirm.classList.add('display-block');
+            saveConfirm.classList.remove('display-none');
+            setTimeout(() => {
+                saveConfirm.classList.remove('display-block');
+                saveConfirm.classList.add('display-none');
+            }, 2000);
         }
     }
 }
 
-// Remove result from favorites array
+// Remove result from Favorites Array
 function removeFavorite(result) {
     for (i = 0; i < favoritesArray.length; i++) {
         if (favoritesArray[i].url.includes(result)) {
             let favoriteMatch = favoritesArray[i];
-            console.log(favoriteMatch);
+            //console.log(favoriteMatch);
             favoritesArray.pop(favoriteMatch);
-            console.log(favoritesArray);
+            console.log("Favorites Array:", favoritesArray);
         }
     }
     updateFavoritesDOM();
@@ -146,5 +153,5 @@ function showResults() {
     getMorePictures();
 }
 
-// On startup
+// On Load
 getNasaPictures();
