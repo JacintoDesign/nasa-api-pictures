@@ -17,6 +17,10 @@ body {
   margin-bottom: 25px;
 }
 
+#favorites, #results, #favoritesNav {
+    width: 800px;
+}
+
 .display-none {
     display: none; 
 }
@@ -40,17 +44,16 @@ body {
   user-select: none;
 }
 
+.text-select.no-cursor {
+    cursor: default;
+}
+
 .blue {
   color: dodgerblue;
 }
 
 .blue:hover {
   color: rgb(0, 99, 199);
-}
-
-.no-styling {
-  cursor: initial;
-  color: black;
 }
 
 .red {
@@ -126,6 +129,7 @@ body {
 
 @media screen and (max-width: 800px) {
   .container { margin-top: 55px; }
+  #favorites, #results, #favoritesNav { width: 100%; }
   .text-select-container { padding: 0 18% 0 19%; }
   .card { max-width: 95%; }
   .card-title { font-size: 20px; }

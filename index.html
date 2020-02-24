@@ -8,21 +8,22 @@
 </head>
 <body>
     <div class="container">
-
-        <div id="favorites">
-            <!-- <div class="text-select-container">
-                <h3 class="text-select blue" onclick="showFavorites()">Load Random Images</h3>
-            </div> -->
-        </div>
-        <div id="results">
-            <!-- <div style="position: fixed;"> -->
-                <div class="text-select-container">
-                    <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
-                    <h3 class="text-select">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
-                    <h3 class="text-select blue" onclick="getMorePictures()">Load More</h3>
-                </div>
+        <!-- When showing Favorites, navigate back to Results -->
+        <div id="favoritesNav">            
+            <div class="text-select-container">
+                <h3 class="text-select blue" onclick="showResults()">Load More NASA Images</h3>
             </div>
-        <!-- </div> -->
+        </div>
+        <!-- Favorites array -->
+        <div id="favorites"></div>
+        <!-- Results array -->
+        <div id="results">
+            <div class="text-select-container">
+                <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
+                <h3 class="text-select no-cursor">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+                <h3 class="text-select blue" onclick="getMorePictures()">Load More</h3>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

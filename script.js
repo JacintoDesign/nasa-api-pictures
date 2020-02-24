@@ -1,9 +1,14 @@
 const favoritesContainer = document.getElementById('favorites');
 const resultsContainer = document.getElementById('results');
+const favoritesNav = document.getElementById('favoritesNav')
 
+// Initialize two empty arrays
 let resultsArray = [];
 let favoritesArray = [];
+// Hide Favorites Navigation
+favoritesNav.classList.add('display-none');
 
+// Get 10 images from NASA API
 function getNasaPictures() {
     fetch('https://api.nasa.gov/planetary/apod?api_key=hHt592uvYa5AKdj9zIGFy4UoOLvHCVQsJh2xmRdL&count=10')
     .then(res => res.json())
@@ -14,6 +19,7 @@ function getNasaPictures() {
     });
 }
 
+// Get 3 additional images from NASA API
 function getMorePictures() {
     fetch('https://api.nasa.gov/planetary/apod?api_key=hHt592uvYa5AKdj9zIGFy4UoOLvHCVQsJh2xmRdL&count=3')
     .then(res => res.json())
@@ -29,8 +35,9 @@ function getMorePictures() {
 
 }
 
+// Create individual result elements, adds elements when getting more pictures
 function updateResultsDOM() {
-    console.log(resultsArray);
+    console.log("Results Array:", resultsArray);
     let i;
     for (i = 0; i < resultsArray.length; i++) {
         resultsArray[i].copyright
@@ -59,8 +66,9 @@ function updateResultsDOM() {
       ).join('');
 }
 
+// Creates elements for favorite items in array
 function updateFavoritesDOM() {
-    console.log(favoritesArray);
+    console.log("Favorites Array:", favoritesArray);
     let i;
     for (i = 0; i < favoritesArray.length; i++) {
         favoritesArray[i].copyright
@@ -69,6 +77,7 @@ function updateFavoritesDOM() {
             //console.log(favoritesArray[i].copyright);
         }
     }
+
     favoritesContainer.innerHTML = favoritesArray.map(
         result => `
         <div class="card">
@@ -77,7 +86,7 @@ function updateFavoritesDOM() {
             </a>      
             <div class="card-body">
             <h5 class="card-title">${result.title}</h5>
-            <p class="save-text" onclick="saveFavorite('${result.url}')">Add To Favorites</p>
+            <p class="save-text" onclick="removeFavorite('${result.url}')">Remove Favorite</p>
             <p class="card-text">${result.explanation}</p>
             <p class="card-text"><small class="text-muted">
                 <strong>${result.date}</strong>
@@ -89,23 +98,53 @@ function updateFavoritesDOM() {
       ).join('');
 }
 
+// Add result to favorites array
 function saveFavorite(result) {
     for (i = 0; i < resultsArray.length; i++) {
         if (resultsArray[i].url.includes(result)) {
-            let found = resultsArray[i];
-            console.log(found);
-            favoritesArray.push(found);
+            let resultMatch = resultsArray[i];
+            console.log(resultMatch);
+            favoritesArray.push(resultMatch);
             console.log(favoritesArray);
         }
     }
 }
 
+// Remove result from favorites array
+function removeFavorite(result) {
+    for (i = 0; i < favoritesArray.length; i++) {
+        if (favoritesArray[i].url.includes(result)) {
+            let favoriteMatch = favoritesArray[i];
+            console.log(favoriteMatch);
+            favoritesArray.pop(favoriteMatch);
+            console.log(favoritesArray);
+        }
+    }
+    updateFavoritesDOM();
+}
+
+// Show Favorites DOM Elements / Hide Results DOM Elements
 function showFavorites() {
     favoritesContainer.classList.add('display-block');
     favoritesContainer.classList.remove('display-none');
     resultsContainer.classList.add('display-none');
     resultsContainer.classList.remove('display-block');
+    favoritesNav.classList.remove('display-none');
+    favoritesNav.classList.add('display-block'); 
     updateFavoritesDOM();
 }
 
+// Hide Favorites DOM Elements / Show Results DOM Elements
+function showResults() {
+    favoritesContainer.classList.add('display-none');
+    favoritesContainer.classList.remove('display-block');
+    resultsContainer.classList.add('display-block');
+    resultsContainer.classList.remove('display-none');
+    favoritesNav.classList.add('display-none');
+    favoritesNav.classList.remove('display-block'); 
+    // Using this to quickly load what's already there
+    getMorePictures();
+}
+
+// On startup
 getNasaPictures();
