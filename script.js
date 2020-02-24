@@ -6,6 +6,7 @@ const saveConfirm = document.getElementById('saveConfirm');
 // Initialize two empty arrays
 let resultsArray = [];
 let favoritesArray = [];
+
 // Hide Favorites Navigation
 favoritesNav.classList.add('display-none');
 
@@ -106,6 +107,7 @@ function saveFavorite(result) {
             //console.log(resultMatch);
             favoritesArray.push(resultMatch);
             console.log("Favorites Array:", favoritesArray);
+
             // Show Save Confirmation for 2 seconds
             saveConfirm.classList.add('display-block');
             saveConfirm.classList.remove('display-none');
@@ -113,6 +115,9 @@ function saveFavorite(result) {
                 saveConfirm.classList.remove('display-block');
                 saveConfirm.classList.add('display-none');
             }, 2000);
+
+            // Set Favorites Array in localStorage
+            localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
         }
     }
 }
@@ -125,6 +130,9 @@ function removeFavorite(result) {
             //console.log(favoriteMatch);
             favoritesArray.pop(favoriteMatch);
             console.log("Favorites Array:", favoritesArray);
+
+            // Set Favorites Array in localStorage
+            localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
         }
     }
     updateFavoritesDOM();
@@ -138,6 +146,14 @@ function showFavorites() {
     resultsContainer.classList.remove('display-block');
     favoritesNav.classList.remove('display-none');
     favoritesNav.classList.add('display-block'); 
+
+    // Get Favorites Array from localStorage
+    if (localStorage.getItem('nasaFavorites') !== null) {
+        favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
+    }
+
+    // Scroll to top of page, refresh DOM
+    window.scroll(0, -3000);
     updateFavoritesDOM();
 }
 
@@ -149,7 +165,9 @@ function showResults() {
     resultsContainer.classList.remove('display-none');
     favoritesNav.classList.add('display-none');
     favoritesNav.classList.remove('display-block'); 
-    // Using this to quickly load what's already there
+
+    // Scroll to top of page, refresh DOM
+    window.scroll(0, -3000);
     getMorePictures();
 }
 

@@ -123,10 +123,11 @@ body {
   right: 50px; 
 }
 
+/* Laptop */
 @media screen and (max-width: 1800px) {
-    .text-select-container { padding: 0 20% 0 20%; }
+  .text-select-container { padding: 0 20% 0 20%; }
 }
-
+/* Large Smartphone (Vertical) */
 @media screen and (max-width: 800px) {
   .container { margin-top: 55px; }
   #favorites, #results, #favoritesNav { width: 100%; }
@@ -135,7 +136,7 @@ body {
   .card-title { font-size: 20px; }
   .card-text { line-height: 1.4rem; font-size: 0.9rem; text-align: justify;}
 }
-
+/* iPhone (Vertical) */
 @media screen and (max-width: 376px) {
   .text-select-container { padding: 0 17% 0 17%; }
   .card { max-width: 93%; }
