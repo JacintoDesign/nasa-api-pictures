@@ -1,14 +1,16 @@
-const favoritesContainer = document.getElementById('favorites');
+const resultsNav = document.getElementById('resultsNav');
 const resultsContainer = document.getElementById('results');
 const favoritesNav = document.getElementById('favoritesNav');
-const saveConfirm = document.getElementById('saveConfirm');
+const favoritesContainer = document.getElementById('favorites');
+const saveConfirmed = document.getElementById('saveConfirmed');
 
 // Initialize two empty arrays
 let resultsArray = [];
 let favoritesArray = [];
 
-// Hide Favorites Navigation
-favoritesNav.classList.add('display-none');
+// Hide Favorites Navigation & Save Confirmation
+favoritesNav.style.display = 'none';
+saveConfirmed.style.display = 'none';
 
 // Get 10 images from NASA API
 function getNasaPictures() {
@@ -17,21 +19,6 @@ function getNasaPictures() {
     .then(data => {
         // console.log(data);
         resultsArray = data; 
-        updateResultsDOM();
-    });
-}
-
-// Get 3 additional images from NASA API
-function getMorePictures() {
-    fetch('https://api.nasa.gov/planetary/apod?api_key=hHt592uvYa5AKdj9zIGFy4UoOLvHCVQsJh2xmRdL&count=3')
-    .then(res => res.json())
-    .then(data => {
-        // console.log(data);
-        for (let j = 0; j < data.length; j++) {
-            let additionalResult = data[j];
-            // console.log(additionalResult);
-            resultsArray.push(additionalResult);
-        }
         updateResultsDOM();
     });
 }
@@ -47,7 +34,7 @@ function updateResultsDOM() {
             //console.log(resultsArray[i].copyright);
         }
     }
-    resultsContainer.innerHTML += resultsArray.map(
+    resultsContainer.innerHTML = resultsArray.map(
         result => `
         <div class="card">
             <a href="${result.hdurl}" title="View Full Image" target="blank" rel="noopener noreferrer">
@@ -64,7 +51,8 @@ function updateResultsDOM() {
             </div>
         </div>
         `  
-      ).join('');
+    ).join('');
+    window.scrollTo(0, -5000);
 }
 
 // Creates elements for favorite items in array
@@ -119,11 +107,9 @@ function saveFavorite(result) {
             console.log("Favorites Array:", favoritesArray);
 
             // Show Save Confirmation for 2 seconds
-            saveConfirm.classList.add('display-block');
-            saveConfirm.classList.remove('display-none');
+            saveConfirmed.style.display = 'block';
             setTimeout(() => {
-                saveConfirm.classList.remove('display-block');
-                saveConfirm.classList.add('display-none');
+                saveConfirmed.style.display = 'none';
             }, 2000);
 
             // Set Favorites Array in localStorage
@@ -150,30 +136,27 @@ function removeFavorite(result) {
 
 // Show Favorites DOM Elements / Hide Results DOM Elements
 function showFavorites() {
-    favoritesContainer.classList.add('display-block');
-    favoritesContainer.classList.remove('display-none');
-    resultsContainer.classList.add('display-none');
-    resultsContainer.classList.remove('display-block');
-    favoritesNav.classList.remove('display-none');
-    favoritesNav.classList.add('display-block'); 
+    favoritesContainer.style.display = 'block';
+    favoritesNav.style.display = 'block';
+    resultsContainer.style.display = 'none';
+    resultsNav.style.display = 'none';
 
     // Scroll to top of page, refresh DOM
-    window.scroll(0, -3000);
+    window.scrollTo(0, -5000);
     updateFavoritesDOM();
 }
 
 // Hide Favorites DOM Elements / Show Results DOM Elements
 function showResults() {
-    favoritesContainer.classList.add('display-none');
-    favoritesContainer.classList.remove('display-block');
-    resultsContainer.classList.add('display-block');
-    resultsContainer.classList.remove('display-none');
-    favoritesNav.classList.add('display-none');
-    favoritesNav.classList.remove('display-block'); 
+    favoritesContainer.style.display = 'none';
+    favoritesNav.style.display = 'none';
+    resultsContainer.style.display = 'block';
+    resultsNav.style.display = 'flex';
+
 
     // Scroll to top of page, refresh DOM
-    window.scroll(0, -3000);
-    getMorePictures();
+    window.scroll(0, -5000);
+    getNasaPictures();
 }
 
 // On Load

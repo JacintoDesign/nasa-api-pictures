@@ -8,25 +8,28 @@
 </head>
 <body>
     <div class="container">
-        <!-- When showing Favorites, navigate back to Results -->
-        <div id="favoritesNav">            
+        <!-- Results Navigation -->
+        <div id="resultsNav">
+            <span class="background"></span>
+            <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
+            <h3 class="text-select no-cursor">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+            <h3 class="text-select blue" onclick="getNasaPictures()">Load More</h3>
+        </div>
+        <!-- Results Array -->
+        <div id="results"></div>
+
+        <!-- Favorites Navigation -->
+        <div id="favoritesNav"> 
+            <span class="background"></span>           
             <div class="text-select-container">
                 <h3 class="text-select blue" onclick="showResults()">Load More NASA Images</h3>
             </div>
         </div>
         <!-- Favorites Array -->
         <div id="favorites"></div>
-        <!-- Results Array -->
-        <div id="results">
-            <div class="text-select-container">
-                <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
-                <h3 class="text-select no-cursor">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
-                <h3 class="text-select blue" onclick="getMorePictures()">Load More</h3>
-            </div>
-        </div>
     </div>
     <!-- Save Confirmation -->
-    <div class="save-confirmed display-none" id="saveConfirm">
+    <div class="save-confirmed" id="saveConfirmed">
         <h1>ADDED!</h1>
     </div>
     <script src="script.js"></script>
