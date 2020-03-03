@@ -3,6 +3,7 @@ const resultsContainer = document.getElementById('results');
 const favoritesNav = document.getElementById('favoritesNav');
 const favoritesContainer = document.getElementById('favorites');
 const saveConfirmed = document.getElementById('saveConfirmed');
+const loader = document.getElementById('loader');
 
 // Initialize two empty arrays
 let resultsArray = [];
@@ -12,8 +13,15 @@ let favoritesArray = [];
 favoritesNav.style.display = 'none';
 saveConfirmed.style.display = 'none';
 
+// Show Loader on Startup
+loader.style.display = 'flex';
+resultsNav.style.display = 'none';
+favoritesNav.style.display = 'none';
+
 // Get 10 images from NASA API
 function getNasaPictures() {
+    loader.style.display = 'flex';
+    resultsNav.style.display = 'none';
     fetch('https://api.nasa.gov/planetary/apod?api_key=hHt592uvYa5AKdj9zIGFy4UoOLvHCVQsJh2xmRdL&count=10')
     .then(res => res.json())
     .then(data => {
@@ -53,6 +61,11 @@ function updateResultsDOM() {
         `  
     ).join('');
     window.scrollTo(0, -5000);
+    // Remove loader, add navigation
+    setTimeout(() => {
+        loader.style.display = 'none';
+        resultsNav.style.display = 'flex';
+    }, 500);
 }
 
 // Creates elements for favorite items in array
@@ -88,7 +101,12 @@ function updateFavoritesDOM() {
             </div>
         </div>
         `  
-      ).join('');
+    ).join('');
+    // Remove loader, add navigation
+    setTimeout(() => {
+        loader.style.display = 'none';
+        favoritesNav.style.display = 'flex';
+    }, 500);
 }
 
 // Add result to Favorites Array
@@ -136,8 +154,9 @@ function removeFavorite(result) {
 
 // Show Favorites DOM Elements / Hide Results DOM Elements
 function showFavorites() {
+    loader.style.display = 'flex';
     favoritesContainer.style.display = 'block';
-    favoritesNav.style.display = 'block';
+    favoritesNav.style.display = 'none';
     resultsContainer.style.display = 'none';
     resultsNav.style.display = 'none';
 
@@ -148,6 +167,7 @@ function showFavorites() {
 
 // Hide Favorites DOM Elements / Show Results DOM Elements
 function showResults() {
+    loader.style.display = 'flex';
     favoritesContainer.style.display = 'none';
     favoritesNav.style.display = 'none';
     resultsContainer.style.display = 'block';

@@ -15,7 +15,16 @@ body {
   margin-bottom: 25px;
 }
 
-#favorites, #results, #favoritesNav {
+#loader {
+  background-color: white;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#favorites, #results {
   width: 800px;
 }
 
