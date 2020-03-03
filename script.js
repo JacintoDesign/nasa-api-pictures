@@ -38,7 +38,7 @@ function updateResultsDOM() {
         result => `
         <div class="card">
             <a href="${result.hdurl}" title="View Full Image" target="blank" rel="noopener noreferrer">
-            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day">
+            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day" loading="lazy">
             </a>      
             <div class="card-body">
             <h5 class="card-title">${result.title}</h5>
@@ -75,7 +75,7 @@ function updateFavoritesDOM() {
         result => `
         <div class="card">
             <a href="${result.hdurl}" title="View Full Image" target="blank" rel="noopener noreferrer">
-            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day">
+            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day" loading="lazy">
             </a>      
             <div class="card-body">
             <h5 class="card-title">${result.title}</h5>
