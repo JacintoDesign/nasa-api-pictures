@@ -9,34 +9,33 @@
 </head>
 <body>
     <!-- Loader -->
-    <div id="loader">
+    <div class="loader">
         <img src="rocket.svg" alt="Rocket Loading Animation">
     </div>
+    <!-- Container -->
     <div class="container">
-        <!-- Results Navigation -->
-        <div id="resultsNav">
+        <!-- Navigation -->
+        <div class="navigation-container">
             <span class="background"></span>
-            <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
-            <h3 class="text-select no-cursor">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
-            <h3 class="text-select blue" onclick="getNasaPictures()">Load More</h3>
-        </div>
-        <!-- Results Array -->
-        <div id="results"></div>
-
-        <!-- Favorites Navigation -->
-        <div id="favoritesNav"> 
-            <span class="background"></span>           
-            <div class="text-select-container">
+            <!-- Results Nav -->
+            <span class="navigation-items hidden" id="resultsNav">
+                <h3 class="text-select blue" onclick="showFavorites()">Favorites</h3>
+                <h3 class="text-select no-cursor">&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+                <h3 class="text-select blue" onclick="getNasaPictures()">Load More</h3>
+            </span>
+            <!-- Favorites Nav -->
+            <span class="navigation-items hidden" id="favoritesNav">
                 <h3 class="text-select blue" onclick="showResults()">Load More NASA Images</h3>
-            </div>
+            </span>
         </div>
-        <!-- Favorites Array -->
-        <div id="favorites"></div>
+        <!-- Images Container -->
+        <div class="images-container" id="images-container" hidden></div>
     </div>
     <!-- Save Confirmation -->
-    <div class="save-confirmed" id="saveConfirmed">
+    <div class="save-confirmed" id="saveConfirmed" hidden>
         <h1>ADDED!</h1>
     </div>
+    <!-- Script -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,9 +1,8 @@
 const resultsNav = document.getElementById('resultsNav');
-const resultsContainer = document.getElementById('results');
+const imagesContainer = document.getElementById('images-container');
 const favoritesNav = document.getElementById('favoritesNav');
-const favoritesContainer = document.getElementById('favorites');
 const saveConfirmed = document.getElementById('saveConfirmed');
-const loader = document.getElementById('loader');
+const loader = document.querySelector('.loader');
 
 // NASA API
 const count = 10;
@@ -14,175 +13,143 @@ const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${co
 let resultsArray = [];
 let favoritesArray = [];
 
-// Hide Favorites Navigation & Save Confirmation
-favoritesNav.style.display = 'none';
-saveConfirmed.style.display = 'none';
+// Scroll to Top, Remove loader, add navigation, image container
+function hideLoader(page) {
+  window.scrollTo(0, -5000);
+  setTimeout(() => {
+    loader.classList.add('hidden');
+    imagesContainer.hidden = false;
+    if (page === 'results') {
+      resultsNav.classList.remove('hidden');
+    } else {
+      favoritesNav.classList.remove('hidden');
+    }
+  }, 500);
+}
 
-// Show Loader on Startup
-loader.style.display = 'flex';
-resultsNav.style.display = 'none';
-favoritesNav.style.display = 'none';
+function updateDOM(page) {
+  // Get Favorites Array from localStorage
+  if (localStorage.getItem('nasaFavorites')) {
+    favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
+  }
+  // Load ResultsArray or FavoritesArray
+  const currentArray = page === 'results' ? resultsArray : favoritesArray;
+  console.log('Current Array:', page, currentArray);
+  // Reset DOM, Loop through Array to create DOM Elements
+  imagesContainer.textContent = '';
+  currentArray.forEach((result) => {
+    // Card Container
+    const card = document.createElement('div');
+    card.classList.add('card');
+    // Link
+    const link = document.createElement('a');
+    link.href = result.hdurl;
+    link.title = 'View Full Image';
+    link.target = '_blank';
+    // Image
+    const image = document.createElement('img');
+    image.src = result.url;
+    image.alt = 'NASA Picture of the Day';
+    image.loading = 'lazy';
+    image.classList.add('card-img-top');
+    // Card Body
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    // Card Title
+    const cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+    cardTitle.textContent = result.title;
+    // Save Text
+    const saveText = document.createElement('p');
+    saveText.classList.add('save-text');
+    if (page === 'results') {
+      saveText.textContent = 'Add To Favorites';
+      saveText.setAttribute('onclick', `saveFavorite('${result.url}')`);
+    } else {
+      saveText.textContent = 'Remove Favorite';
+      saveText.setAttribute('onclick', `removeFavorite('${result.url}')`);
+    }
+    // Card Text
+    const cardText = document.createElement('p');
+    cardText.textContent = result.explanation;
+    // Footer Container
+    const footer = document.createElement('small');
+    footer.classList.add('text-muted');
+    // Date
+    const date = document.createElement('strong');
+    date.textContent = result.date;
+    // Copyright
+    const copyrightResult = result.copyright === undefined ? '' : result.copyright;
+    const copyright = document.createElement('span');
+    copyright.textContent = ` ${copyrightResult}`;
+    // Append
+    footer.append(date, copyright);
+    cardBody.append(cardTitle, saveText, cardText, footer);
+    link.appendChild(image);
+    card.append(link, cardBody);
+    imagesContainer.appendChild(card);
+  });
+  hideLoader(page);
+}
 
 // Get 10 images from NASA API
 async function getNasaPictures() {
-  loader.style.display = 'flex';
-  resultsNav.style.display = 'none';
   try {
     const response = await fetch(apiUrl);
     resultsArray = await response.json();
-    updateResultsDOM();
+    updateDOM('results');
   } catch (error) {
     // Catch Error Here
   }
 }
 
-// Create individual result elements, adds elements when getting more pictures
-function updateResultsDOM() {
-  // Loop through Results Array to replace undefined copyright
-  console.log('Results Array:', resultsArray);
-  for (let i = 0; i < resultsArray.length; i++) {
-    if (resultsArray[i].copyright === undefined) {
-      resultsArray[i].copyright = '';
-      // console.log(resultsArray[i].copyright);
-    }
-  }
-  resultsContainer.innerHTML = resultsArray
-    .map(
-      (result) => `
-        <div class="card">
-            <a href="${result.hdurl}" title="View Full Image" target="blank" rel="noopener noreferrer">
-            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day" loading="lazy">
-            </a>      
-            <div class="card-body">
-            <h5 class="card-title">${result.title}</h5>
-            <p class="save-text" onclick="saveFavorite('${result.url}')" id="favoriteLabel">Add To Favorites</p>
-            <p class="card-text">${result.explanation}</p>
-            <p class="card-text"><small class="text-muted">
-                <strong>${result.date}</strong>
-                <span>${result.copyright}</span>
-            </small></p>
-            </div>
-        </div>
-        `,
-    )
-    .join('');
-  window.scrollTo(0, -5000);
-  // Remove loader, add navigation
-  setTimeout(() => {
-    loader.style.display = 'none';
-    resultsNav.style.display = 'flex';
-  }, 500);
-}
-
-// Creates elements for favorite items in array
-function updateFavoritesDOM() {
-  // Get Favorites Array from localStorage
-  if (localStorage.getItem('nasaFavorites') !== null) {
-    favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
-  }
-  // Loop through Results Array to replace undefined copyright
-  console.log('Favorites Array:', favoritesArray);
-  for (i = 0; i < favoritesArray.length; i++) {
-    favoritesArray[i].copyright;
-    if (favoritesArray[i].copyright === undefined) {
-      favoritesArray[i].copyright = '';
-      // console.log(favoritesArray[i].copyright);
-    }
-  }
-
-  favoritesContainer.innerHTML = favoritesArray
-    .map(
-      (result) => `
-        <div class="card">
-            <a href="${result.hdurl}" title="View Full Image" target="blank" rel="noopener noreferrer">
-            <img class="card-img-top" src="${result.url}" alt="NASA Picture of the Day" loading="lazy">
-            </a>
-            <div class="card-body">
-            <h5 class="card-title">${result.title}</h5>
-            <p class="save-text" onclick="removeFavorite('${result.url}')">Remove Favorite</p>
-            <p class="card-text">${result.explanation}</p>
-            <p class="card-text"><small class="text-muted">
-                <strong>${result.date}</strong>
-                <span>${result.copyright}</span>
-            </small></p>
-            </div>
-        </div>
-        `,
-    )
-    .join('');
-  // Remove loader, add navigation
-  setTimeout(() => {
-    loader.style.display = 'none';
-    favoritesNav.style.display = 'flex';
-  }, 500);
-}
-
 // Add result to Favorites Array
-function saveFavorite(result) {
+function saveFavorite(item) {
   // Get Favorites Array from localStorage
-  if (localStorage.getItem('nasaFavorites') !== null) {
+  if (localStorage.getItem('nasaFavorites')) {
     favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
   }
-
   // Loop through Results Array to select Favorite
-  for (i = 0; i < resultsArray.length; i++) {
-    if (resultsArray[i].url.includes(result)) {
-      const resultMatch = resultsArray[i];
-      // console.log(resultMatch);
-      favoritesArray.push(resultMatch);
-      console.log('Favorites Array:', favoritesArray);
-
-      // Show Save Confirmation for 2 seconds
-      saveConfirmed.style.display = 'block';
-      setTimeout(() => {
-        saveConfirmed.style.display = 'none';
-      }, 2000);
-
-      // Set Favorites Array in localStorage
-      localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
+  resultsArray.forEach((result) => {
+    if (result.url.includes(item)) {
+      const itemMatch = result;
+      favoritesArray.push(itemMatch);
     }
-  }
+  });
+  // Show Save Confirmation for 2 seconds
+  saveConfirmed.hidden = false;
+  setTimeout(() => {
+    saveConfirmed.hidden = true;
+  }, 2000);
+  // Set Favorites Array in localStorage
+  localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
 }
 
-// Remove result from Favorites Array
-function removeFavorite(result) {
-  for (i = 0; i < favoritesArray.length; i++) {
-    if (favoritesArray[i].url.includes(result)) {
-      // let favoriteMatch = favoritesArray[i];
-      // console.log(favoriteMatch);
+// Remove item from Favorites Array
+function removeFavorite(item) {
+  [...favoritesArray].forEach((favorite, i) => {
+    if (favorite.url.includes(item)) {
       favoritesArray.splice(i, 1);
-      console.log('Favorites Array:', favoritesArray);
-
       // Set Favorites Array in localStorage
       localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
+      updateDOM('favorites');
     }
-  }
-  updateFavoritesDOM();
+  });
 }
 
-// Show Favorites DOM Elements / Hide Results DOM Elements
+// Show Favorites, Hide Results
 function showFavorites() {
-  loader.style.display = 'flex';
-  favoritesContainer.style.display = 'block';
-  favoritesNav.style.display = 'none';
-  resultsContainer.style.display = 'none';
-  resultsNav.style.display = 'none';
-
-  // Scroll to top of page, refresh DOM
-  window.scrollTo(0, -5000);
-  updateFavoritesDOM();
+  loader.classList.remove('hidden');
+  favoritesNav.classList.remove('hidden');
+  resultsNav.classList.add('hidden');
+  updateDOM('favorites');
 }
 
-// Hide Favorites DOM Elements / Show Results DOM Elements
+// Show Results, Hide Favorites
 function showResults() {
-  loader.style.display = 'flex';
-  favoritesContainer.style.display = 'none';
-  favoritesNav.style.display = 'none';
-  resultsContainer.style.display = 'block';
-  resultsNav.style.display = 'flex';
-
-  // Scroll to top of page, refresh DOM
-  window.scroll(0, -5000);
+  loader.classList.remove('hidden');
+  favoritesNav.classList.add('hidden');
+  resultsNav.classList.remove('hidden');
   getNasaPictures();
 }
 
