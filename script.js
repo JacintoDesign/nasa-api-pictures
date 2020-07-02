@@ -11,7 +11,7 @@ const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${co
 
 // Initialize two empty arrays
 let resultsArray = [];
-let favoritesArray = [];
+let favorites = {};
 
 // Scroll To Top, Remove Loader, Show Content
 function hideLoader(page) {
@@ -26,8 +26,8 @@ function hideLoader(page) {
 }
 
 function createDOMNodes(page) {
-  // Load ResultsArray or FavoritesArray
-  const currentArray = page === 'results' ? resultsArray : favoritesArray;
+  // Load ResultsArray or Favorites
+  const currentArray = page === 'results' ? resultsArray : Object.values(favorites);
   console.log('Current Array:', page, currentArray);
   currentArray.forEach((result) => {
     // Card Container
@@ -86,7 +86,7 @@ function createDOMNodes(page) {
 function updateDOM(page) {
   // Get Favorites Array from localStorage
   if (localStorage.getItem('nasaFavorites')) {
-    favoritesArray = JSON.parse(localStorage.getItem('nasaFavorites'));
+    favorites = JSON.parse(localStorage.getItem('nasaFavorites'));
   }
   // Reset DOM, Create DOM Nodes, Hide Loader
   imagesContainer.textContent = '';
@@ -108,33 +108,30 @@ async function getNasaPictures() {
 }
 
 // Add result to Favorites Array
-function saveFavorite(item) {
+function saveFavorite(itemUrl) {
   // Loop through Results Array to select Favorite
-  resultsArray.forEach((result) => {
-    if (result.url.includes(item)) {
-      const itemMatch = result;
-      favoritesArray.push(itemMatch);
+  resultsArray.forEach((item) => {
+    if (item.url.includes(itemUrl) && !favorites[itemUrl]) {
+      favorites[itemUrl] = item;
+      // Show Save Confirmation for 2 seconds
+      saveConfirmed.hidden = false;
+      setTimeout(() => {
+        saveConfirmed.hidden = true;
+      }, 2000);
+      // Set Favorites Array in localStorage
+      localStorage.setItem('nasaFavorites', JSON.stringify(favorites));
     }
   });
-  // Show Save Confirmation for 2 seconds
-  saveConfirmed.hidden = false;
-  setTimeout(() => {
-    saveConfirmed.hidden = true;
-  }, 2000);
-  // Set Favorites Array in localStorage
-  localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
 }
 
 // Remove item from Favorites Array
-function removeFavorite(item) {
-  favoritesArray.forEach((favorite, i) => {
-    if (favorite.url.includes(item)) {
-      favoritesArray.splice(i, 1);
-      // Set Favorites Array in localStorage
-      localStorage.setItem('nasaFavorites', JSON.stringify(favoritesArray));
-      updateDOM('favorites');
-    }
-  });
+function removeFavorite(itemUrl) {
+  if (favorites[itemUrl]) {
+    delete favorites[itemUrl];
+    // Set Favorites Array in localStorage
+    localStorage.setItem('nasaFavorites', JSON.stringify(favorites));
+    updateDOM('favorites');
+  }
 }
 
 // Show Favorites, Hide Results
