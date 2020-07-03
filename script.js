@@ -1,7 +1,7 @@
 const resultsNav = document.getElementById('resultsNav');
-const imagesContainer = document.getElementById('images-container');
 const favoritesNav = document.getElementById('favoritesNav');
-const saveConfirmed = document.getElementById('saveConfirmed');
+const imagesContainer = document.querySelector('.images-container');
+const saveConfirmed = document.querySelector('.save-confirmed');
 const loader = document.querySelector('.loader');
 
 // NASA API
@@ -28,7 +28,6 @@ function hideLoader(page) {
 function createDOMNodes(page) {
   // Load ResultsArray or Favorites
   const currentArray = page === 'results' ? resultsArray : Object.values(favorites);
-  console.log('Current Array:', page, currentArray);
   currentArray.forEach((result) => {
     // Card Container
     const card = document.createElement('div');
