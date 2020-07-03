@@ -15,7 +15,7 @@ let favorites = {};
 
 // Scroll To Top, Remove Loader, Show Content
 function hideLoader(page) {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   loader.classList.add('hidden');
   imagesContainer.hidden = false;
   if (page === 'results') {
@@ -52,7 +52,7 @@ function createDOMNodes(page) {
     cardTitle.textContent = result.title;
     // Save Text
     const saveText = document.createElement('p');
-    saveText.classList.add('save-text');
+    saveText.classList.add('clickable');
     if (page === 'results') {
       saveText.textContent = 'Add To Favorites';
       saveText.setAttribute('onclick', `saveFavorite('${result.url}')`);

@@ -22,7 +22,7 @@ body {
 
 /* Loader */
 .loader {
-  background-color: whitesmoke;
+  background: whitesmoke;
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -48,26 +48,18 @@ body {
   position: fixed;
   right: 0;
   width: 100%;
-  background-color: whitesmoke;
+  background: whitesmoke;
   height: 60px;
   z-index: -1;
 }
 
-.text-select {
-  text-align: center;
+.clickable {
+  color: dodgerblue;
   cursor: pointer;
   user-select: none;
 }
 
-.text-select.no-cursor {
-  cursor: default;
-}
-
-.blue {
-  color: dodgerblue;
-}
-
-.blue:hover {
+.clickable:hover {
   color: rgb(0, 99, 199);
 }
 
@@ -105,22 +97,8 @@ body {
 }
 
 /* Save Confirmation */
-.save-text {
-  color: dodgerblue;
-  cursor: pointer;
-  user-select: none;
-}
-
-.save-text:hover {
-  color: rgb(0, 99, 199);
-}
-
-.item-saved {
-  color: black !important;
-}
-
 .save-confirmed {
-  background-color: white;
+  background: white;
   padding: 8px 16px;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
