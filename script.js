@@ -13,10 +13,9 @@ let resultsArray = [];
 let favorites = {};
 
 // Scroll To Top, Remove Loader, Show Content
-function hideLoader(page) {
+function showContent(page) {
   window.scrollTo({ top: 0, behavior: 'instant' });
   loader.classList.add('hidden');
-  imagesContainer.hidden = false;
   if (page === 'results') {
     resultsNav.classList.remove('hidden');
     favoritesNav.classList.add('hidden');
@@ -88,10 +87,10 @@ function updateDOM(page) {
   if (localStorage.getItem('nasaFavorites')) {
     favorites = JSON.parse(localStorage.getItem('nasaFavorites'));
   }
-  // Reset DOM, Create DOM Nodes, Hide Loader
+  // Reset DOM, Create DOM Nodes, Show Content
   imagesContainer.textContent = '';
   createDOMNodes(page);
-  hideLoader(page);
+  showContent(page);
 }
 
 // Get 10 images from NASA API
