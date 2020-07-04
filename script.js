@@ -6,10 +6,9 @@ const loader = document.querySelector('.loader');
 
 // NASA API
 const count = 10;
-const apiKey = 'hHt592uvYa5AKdj9zIGFy4UoOLvHCVQsJh2xmRdL';
+const apiKey = 'DEMO_KEY';
 const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${count}`;
 
-// Initialize two empty arrays
 let resultsArray = [];
 let favorites = {};
 
@@ -20,7 +19,9 @@ function hideLoader(page) {
   imagesContainer.hidden = false;
   if (page === 'results') {
     resultsNav.classList.remove('hidden');
+    favoritesNav.classList.add('hidden');
   } else {
+    resultsNav.classList.add('hidden');
     favoritesNav.classList.remove('hidden');
   }
 }
@@ -83,7 +84,7 @@ function createDOMNodes(page) {
 }
 
 function updateDOM(page) {
-  // Get Favorites Array from localStorage
+  // Get Favorites from localStorage
   if (localStorage.getItem('nasaFavorites')) {
     favorites = JSON.parse(localStorage.getItem('nasaFavorites'));
   }
@@ -106,7 +107,7 @@ async function getNasaPictures() {
   }
 }
 
-// Add result to Favorites Array
+// Add result to Favorites
 function saveFavorite(itemUrl) {
   // Loop through Results Array to select Favorite
   resultsArray.forEach((item) => {
@@ -117,36 +118,20 @@ function saveFavorite(itemUrl) {
       setTimeout(() => {
         saveConfirmed.hidden = true;
       }, 2000);
-      // Set Favorites Array in localStorage
+      // Set Favorites in localStorage
       localStorage.setItem('nasaFavorites', JSON.stringify(favorites));
     }
   });
 }
 
-// Remove item from Favorites Array
+// Remove item from Favorites
 function removeFavorite(itemUrl) {
   if (favorites[itemUrl]) {
     delete favorites[itemUrl];
-    // Set Favorites Array in localStorage
+    // Set Favorites in localStorage
     localStorage.setItem('nasaFavorites', JSON.stringify(favorites));
     updateDOM('favorites');
   }
-}
-
-// Show Favorites, Hide Results
-function showFavorites() {
-  loader.classList.remove('hidden');
-  favoritesNav.classList.remove('hidden');
-  resultsNav.classList.add('hidden');
-  updateDOM('favorites');
-}
-
-// Show Results, Hide Favorites
-function showResults() {
-  loader.classList.remove('hidden');
-  favoritesNav.classList.add('hidden');
-  resultsNav.classList.remove('hidden');
-  getNasaPictures();
 }
 
 // On Load
